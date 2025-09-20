@@ -1,4 +1,4 @@
-# Use Maven to build the app
+# Build stage
 FROM maven:3.9.6-eclipse-temurin-21 AS build
 WORKDIR /app
 COPY . .
@@ -9,4 +9,6 @@ FROM eclipse-temurin:21-jdk-alpine
 WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
 EXPOSE 8080
-ENTRYPOINT ["java","-jar","app.jar"]
+
+# Important: use Render's PORT env variable
+CMD ["sh", "-c", "java -Dserver.port=$PORT -jar app.jar"]
